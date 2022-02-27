@@ -1,37 +1,39 @@
-import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
 
-export const reducer = (state = 0, action) => {
-  console.log({ action, state })
-  switch (action.type) {
-    case 'incrementar':
-      return state + 1
-    case 'decrementar':
-      return state - 1
-    case 'set':
-      return action.payload
-    default:
-      return state
-  }
-} 
-
-function App() {
-  const [valor, setValor] = useState('')
-  const dispatch = useDispatch()
-  const state = useSelector(state => state)
-  const set = () => {
-    dispatch({ type: 'set', payload: valor})
-    setValor('')
-  } 
-  return (
-    <div>
-      <p>Contador: {state}</p>
-      <button onClick={() => dispatch({ type: 'incrementar'})}>Incrementar</button>
-      <button onClick={() => dispatch({ type: 'decrementar'})}>Decrementar</button>
-      <button onClick={set}>Set</button>
-      <input value={valor} onChange={e => setValor(Number(e.target.value))}/>
-    </div>
-  );
+const initialState = {
+    entities: [],
 }
 
-export default App;
+export const reducer = (state={initialState}, action) => {
+    switch (action.type) {
+        case 'todo/add':
+            console.log("reducer")
+            return {
+                ...state,
+                entities: [{}]
+            }
+    }
+    return state
+}
+
+const App = () => {
+    const dispatch = useDispatch()
+    const state = useSelector(state => state)
+    console.log(state, 'rendering');
+    return(
+        <div>
+            <form>
+                <input/>
+            </form>
+            <button onClick={() => dispatch({ type: 'todo/add'})}>Mostrar todos</button>
+            <button>Completados</button>
+            <button>Incompletos</button>
+            <ul>
+                <li>todo 1</li>
+                <li>todo 2</li>
+            </ul>
+        </div>
+    )
+}
+
+export default App
