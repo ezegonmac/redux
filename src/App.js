@@ -1,42 +1,54 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { combineReducers } from "redux";
 
-const initialState = {
-    entities: [],
-    filter: 'all', // complete || incomplete
+// const initialState = {
+//     entities: [],
+//     filter: 'all', // complete || incomplete
+// }
+
+export const filterReducer = (state = 'all', action) => {
+    switch(action.type) {
+        case 'filter/set': 
+            return action.payload
+        default:
+            return state
+    }
 }
 
-export const reducer = (state=initialState, action) => {
-    switch (action.type) {
+export const todosReducer = (state = [], action) => {
+    switch(action.type) {
         case 'todo/add': {
-            console.log("reducer")
-            return {
-                ...state,
-                entities: state.entities.concat({ ...action.payload })
-            }
+            return state.concat({ ...action.payload })
         }
         case 'todo/complete': {
-            const newTodos = state.entities.map(todo=>{
+            const newTodos = state.map(todo=>{
                 if(todo.id === action.payload.id) {
                     return { ...todo, completed: !todo.completed}
                 }
                 return todo
             })
 
-            return {
-                ...state,
-                entities: newTodos
-            }
+            return newTodos
         }
-        case 'filter/set': {
-            return {
-                ...state,
-                filter: action.payload,
-            }
-        }
+        default:
+            return state
     }
-    return state
 }
+
+export const reducer = combineReducers({
+    entities: todosReducer,
+    filter: filterReducer
+})
+
+// <====>
+
+// export const reducer = (state = initialState, action) => {
+//     return {
+//         entities: todosReducer(state.entities, action),
+//         filter: filterReducer(state.filter, action)
+//     }
+// }
 
 const selectTodos = state => {
     const { entities, filter } = state
