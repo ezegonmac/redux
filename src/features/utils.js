@@ -1,4 +1,11 @@
 
+//
+export const mat = entity => ([
+    `${entity}/pending`, 
+    `${entity}/fulfilled`, 
+    `${entity}/rejected`
+])
+
 //make action creator
 export const mac = (type, ...argNames) => 
     (...args) => {
@@ -8,6 +15,12 @@ export const mac = (type, ...argNames) =>
         })
         return action
 }
+
+export const asyncMac = asyncTypes => ([
+    mac(asyncTypes[0]),
+    mac(asyncTypes[1], 'payload'),
+    mac(asyncTypes[2], 'error'),
+])
 
 export const reduceReducers = (...reducers) => (state, action) => 
     reducers.reduce((acc, el) => el(acc, action), state) 

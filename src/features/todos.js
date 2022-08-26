@@ -1,9 +1,17 @@
 import { combineReducers } from "redux"
-import { mac, makeCrudReducer, makeFetchingReducer, makeSetReducer, reduceReducers } from "./utils"
+import { mac, mat, asyncMac, makeCrudReducer, makeFetchingReducer, makeSetReducer, reduceReducers } from "./utils"
+
+
+const asyncTodos = mat('todos')
 
 // Action creators
 
-export const setPending = mac('todos/pending')
+const [setPending, setFulfilled, setError] = asyncMac(asyncTodos)
+
+// ==>
+// ==>
+
+// export const setPending = mac('todos/pending')
 
 // <====>
 // export const setPending = () => {
@@ -12,12 +20,12 @@ export const setPending = mac('todos/pending')
 //     }
 // }
         
-export const setFulfilled = mac('todos/fulfilled', 'payload' )        
+// export const setFulfilled = mac('todos/fulfilled', 'payload' )        
         
 // <====>
 // export const setFulfilled = payload => ({ type: 'todos/fulfilled', payload })
 
-export const setError = mac('todo/error', 'error')
+// export const setError = mac('todo/error', 'error')
 
 // <====>
 // export const setError = e => ({ type: 'todo/error', error: e.message })
@@ -45,11 +53,7 @@ export const filterReducer = makeSetReducer([
     'filter/set'
 ]) 
 
-export const fetchingReducer = makeFetchingReducer([
-    'todos/pending',
-    'todos/fulfilled',
-    'todos/rejected'
-])
+export const fetchingReducer = makeFetchingReducer(asyncTodos)
 
 const fulfilledReducer = makeSetReducer(['todos/fulfilled'])
 const crudReducer = makeCrudReducer(['todo/add', 'todo/complete'])
