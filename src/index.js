@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import './index.css';
-import App, {reducer, asyncMiddleware} from './App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { asyncMiddleware } from './middlewares/async';
+import { reducer } from './features/todos';
 
 const store = createStore(reducer, applyMiddleware(asyncMiddleware))
 
